@@ -2,30 +2,47 @@ import { $dt } from '@primeuix/styled';
 
 export default {
     innerWidth(el) {
+        // 检查传入的元素 el 是否存在
         if (el) {
+            // 获取元素的 offsetWidth，表示元素的总宽度（包括内容、内边距和边框）
             let width = el.offsetWidth;
+    
+            // 获取元素的计算样式
             let style = getComputedStyle(el);
-
+    
+            // 将元素的左右内边距添加到总宽度中
+            // parseFloat 用于将样式值（字符串）转换为数字
             width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-
+    
+            // 返回计算后的宽度，包括内边距
             return width;
         }
-
+    
+        // 如果元素不存在，返回 0
         return 0;
     },
-
+    
     width(el) {
+        // 检查传入的元素 el 是否存在
         if (el) {
+            // 获取元素的 offsetWidth，表示元素的总宽度（包括内容、内边距和边框）
             let width = el.offsetWidth;
+    
+            // 获取元素的计算样式
             let style = getComputedStyle(el);
-
+    
+            // 将元素的左右内边距从总宽度中减去
+            // parseFloat 用于将样式值（字符串）转换为数字
             width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-
+    
+            // 返回计算后的宽度，不包括内边距
             return width;
         }
-
+    
+        // 如果元素不存在，返回 0
         return 0;
     },
+    
 
     getWindowScrollTop() {
         let doc = document.documentElement;
