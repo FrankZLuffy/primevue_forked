@@ -57,17 +57,34 @@ export interface BreadcrumbDesignTokens extends ColorSchemeDesignToken<Breadcrum
          */
         hoverColor?: string;
         /**
-         * Icon color of item
-         *
-         * @designToken breadcrumb.item.icon.color
-         */
-        iconColor?: string;
-        /**
          * Border radius of item
          *
          * @designToken breadcrumb.item.border.radius
          */
         borderRadius?: string;
+        /**
+         * Gap of item
+         *
+         * @designToken breadcrumb.item.gap
+         */
+        gap?: string;
+        /**
+         * Icon of item
+         */
+        icon?: {
+            /**
+             * Icon color of item
+             *
+             * @designToken breadcrumb.item.icon.color
+             */
+            color?: string;
+            /**
+             * Icon hover color of item
+             *
+             * @designToken breadcrumb.item.icon.hover.color
+             */
+            hoverColor?: string;
+        };
         /**
          * Focus ring of item
          */

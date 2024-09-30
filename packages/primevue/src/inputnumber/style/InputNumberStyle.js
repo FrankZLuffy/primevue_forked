@@ -40,6 +40,7 @@ const theme = ({ dt }) => `
     top: 1px;
     right: 1px;
     height: calc(100% - 2px);
+    z-index: 1;
 }
 
 .p-inputnumber-stacked .p-inputnumber-increment-button {
@@ -71,8 +72,8 @@ const theme = ({ dt }) => `
 
 .p-inputnumber-horizontal .p-inputnumber-increment-button {
     order: 3;
-    border-top-right-radius: ${dt('border.radius.md')};
-    border-bottom-right-radius: ${dt('border.radius.md')};
+    border-top-right-radius: ${dt('inputnumber.button.border.radius')};
+    border-bottom-right-radius: ${dt('inputnumber.button.border.radius')};
     border-left: 0 none;
 }
 
@@ -83,8 +84,8 @@ const theme = ({ dt }) => `
 
 .p-inputnumber-horizontal .p-inputnumber-decrement-button {
     order: 1;
-    border-top-left-radius: ${dt('border.radius.md')};
-    border-bottom-left-radius: ${dt('border.radius.md')};
+    border-top-left-radius: ${dt('inputnumber.button.border.radius')};
+    border-bottom-left-radius: ${dt('inputnumber.button.border.radius')};
     border-right: 0 none;
 }
 
@@ -107,8 +108,8 @@ const theme = ({ dt }) => `
 
 .p-inputnumber-vertical .p-inputnumber-increment-button {
     order: 1;
-    border-top-left-radius: ${dt('border.radius.md')};
-    border-top-right-radius: ${dt('border.radius.md')};
+    border-top-left-radius: ${dt('inputnumber.button.border.radius')};
+    border-top-right-radius: ${dt('inputnumber.button.border.radius')};
     width: 100%;
     border-bottom: 0 none;
 }
@@ -121,8 +122,8 @@ const theme = ({ dt }) => `
 
 .p-inputnumber-vertical .p-inputnumber-decrement-button {
     order: 3;
-    border-bottom-left-radius: ${dt('border.radius.md')};
-    border-bottom-right-radius: ${dt('border.radius.md')};
+    border-bottom-left-radius: ${dt('inputnumber.button.border.radius')};
+    border-bottom-right-radius: ${dt('inputnumber.button.border.radius')};
     width: 100%;
     border-top: 0 none;
 }
@@ -131,15 +132,15 @@ const theme = ({ dt }) => `
     flex: 1 1 auto;
 }
 
-.p-fluid .p-inputnumber {
+.p-inputnumber-fluid {
     width: 100%;
 }
 
-.p-fluid .p-inputnumber .p-inputnumber-input {
+.p-inputnumber-fluid .p-inputnumber-input {
     width: 1%;
 }
 
-.p-fluid .p-inputnumber-vertical .p-inputnumber-input {
+.p-inputnumber-fluid.p-inputnumber-vertical .p-inputnumber-input {
     width: 100%;
 }
 `;
@@ -152,7 +153,8 @@ const classes = {
             'p-inputwrapper-focus': instance.focused,
             'p-inputnumber-stacked': props.showButtons && props.buttonLayout === 'stacked',
             'p-inputnumber-horizontal': props.showButtons && props.buttonLayout === 'horizontal',
-            'p-inputnumber-vertical': props.showButtons && props.buttonLayout === 'vertical'
+            'p-inputnumber-vertical': props.showButtons && props.buttonLayout === 'vertical',
+            'p-inputnumber-fluid': instance.hasFluid
         }
     ],
     pcInput: 'p-inputnumber-input',

@@ -1,6 +1,6 @@
 {
     "name": "@primevue/themes",
-    "version": "4.0.0-rc.2",
+    "version": "4.0.7",
     "author": "PrimeTek Informatics",
     "description": "",
     "homepage": "https://primevue.org/",
@@ -72,8 +72,8 @@
         "build:postbuild": "node ./scripts/postbuild.mjs",
         "dev:link": "pnpm link --global && npm link"
     },
-    "peerDependencies": {
-        "@primeuix/styled": "^0.0.1"
+    "dependencies": {
+        "@primeuix/styled": "^0.1.1"
     },
     "engines": {
         "node": ">=12.11.0"

@@ -55,14 +55,23 @@
         </div>
     </div>
     <div v-else-if="isBasic" :class="cx('root')" v-bind="ptmi('root')">
-        <Message v-for="msg of messages" :key="msg" severity="error" @close="onMessageClose" :unstyled="unstyled" :pt="ptm('pcMessages')">{{ msg }}</Message>
-        <Button :label="chooseButtonLabel" :class="chooseButtonClass" :style="style" :disabled="disabled" :unstyled="unstyled" @mouseup="onBasicUploaderClick" @keydown.enter="choose" @focus="onFocus" @blur="onBlur" v-bind="ptm('pcButton')">
+        <Message v-for="msg of messages" :key="msg" severity="error" @close="onMessageClose" :unstyled="unstyled" :pt="ptm('pcMessage')">{{ msg }}</Message>
+        <Button
+            :label="chooseButtonLabel"
+            :class="chooseButtonClass"
+            :style="style"
+            :disabled="disabled"
+            :unstyled="unstyled"
+            @mouseup="onBasicUploaderClick"
+            @keydown.enter="choose"
+            @focus="onFocus"
+            @blur="onBlur"
+            v-bind="chooseButtonProps"
+            :pt="ptm('pcChooseButton')"
+        >
             <template #icon="iconProps">
-                <slot v-if="!hasFiles || auto" name="uploadicon">
-                    <component :is="uploadIcon ? 'span' : 'UploadIcon'" :class="[iconProps.class, uploadIcon]" aria-hidden="true" v-bind="ptm('pcButton')['icon']" />
-                </slot>
-                <slot v-else name="chooseicon">
-                    <component :is="chooseIcon ? 'span' : 'PlusIcon'" :class="[iconProps.class, chooseIcon]" aria-hidden="true" v-bind="ptm('pcButton')['icon']" />
+                <slot name="chooseicon">
+                    <component :is="chooseIcon ? 'span' : 'PlusIcon'" :class="[iconProps.class, chooseIcon]" aria-hidden="true" v-bind="ptm('pcChooseButton')['icon']" />
                 </slot>
             </template>
         </Button>
@@ -71,12 +80,12 @@
                 {{ basicFileChosenLabel }}
             </span>
         </slot>
-        <input v-if="!hasFiles" ref="fileInput" type="file" :accept="accept" :disabled="disabled" :multiple="multiple" @change="onFileSelect" @focus="onFocus" @blur="onBlur" v-bind="ptm('input')" />
+        <input ref="fileInput" type="file" :accept="accept" :disabled="disabled" :multiple="multiple" @change="onFileSelect" @focus="onFocus" @blur="onBlur" v-bind="ptm('input')" />
     </div>
 </template>
 
 <script>
-import { DomHandler } from '@primevue/core/utils';
+import { addClass, removeClass } from '@primeuix/utils/dom';
 import PlusIcon from '@primevue/icons/plus';
 import TimesIcon from '@primevue/icons/times';
 import UploadIcon from '@primevue/icons/upload';
@@ -108,13 +117,17 @@ export default {
             if (this.hasFiles) this.uploader();
         },
         onBasicUploaderClick(event) {
-            if (event.button === 0 && !this.hasFiles) this.$refs.fileInput.click();
+            if (event.button === 0) this.$refs.fileInput.click();
         },
         onFileSelect(event) {
             if (event.type !== 'drop' && this.isIE11() && this.duplicateIEEvent) {
                 this.duplicateIEEvent = false;
 
                 return;
+            }
+
+            if (this.isBasic && this.hasFiles) {
+                this.files = [];
             }
 
             this.messages = [];
@@ -296,7 +309,7 @@ export default {
         },
         onDragOver(event) {
             if (!this.disabled) {
-                !this.isUnstyled && DomHandler.addClass(this.$refs.content, 'p-fileupload-highlight');
+                !this.isUnstyled && addClass(this.$refs.content, 'p-fileupload-highlight');
                 this.$refs.content.setAttribute('data-p-highlight', true);
                 event.stopPropagation();
                 event.preventDefault();
@@ -304,13 +317,13 @@ export default {
         },
         onDragLeave() {
             if (!this.disabled) {
-                !this.isUnstyled && DomHandler.removeClass(this.$refs.content, 'p-fileupload-highlight');
+                !this.isUnstyled && removeClass(this.$refs.content, 'p-fileupload-highlight');
                 this.$refs.content.setAttribute('data-p-highlight', false);
             }
         },
         onDrop(event) {
             if (!this.disabled) {
-                !this.isUnstyled && DomHandler.removeClass(this.$refs.content, 'p-fileupload-highlight');
+                !this.isUnstyled && removeClass(this.$refs.content, 'p-fileupload-highlight');
                 this.$refs.content.setAttribute('data-p-highlight', false);
                 event.stopPropagation();
                 event.preventDefault();

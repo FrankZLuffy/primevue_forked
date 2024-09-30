@@ -298,6 +298,12 @@ export { default as FloatLabel } from './floatlabel/FloatLabel.vue';
 export * from './floatlabel/style/FloatLabelStyle.js';
 export { default as FloatLabelStyle } from './floatlabel/style/FloatLabelStyle.js';
 
+// Fluid
+export * from './fluid/Fluid.vue';
+export { default as Fluid } from './fluid/Fluid.vue';
+export * from './fluid/style/FluidStyle.js';
+export { default as FluidStyle } from './fluid/style/FluidStyle.js';
+
 // FocusTrap
 export * from './focustrap/FocusTrap.js';
 export { default as FocusTrap } from './focustrap/FocusTrap.js';
@@ -643,12 +649,6 @@ export * from './stepper/Stepper.vue';
 export { default as Stepper } from './stepper/Stepper.vue';
 export * from './stepper/style/StepperStyle.js';
 export { default as StepperStyle } from './stepper/style/StepperStyle.js';
-
-// StepperPanel
-export * from './stepperpanel/StepperPanel.vue';
-export { default as StepperPanel } from './stepperpanel/StepperPanel.vue';
-export * from './stepperpanel/style/StepperPanelStyle.js';
-export { default as StepperPanelStyle } from './stepperpanel/style/StepperPanelStyle.js';
 
 // Steps
 export * from './steps/Steps.vue';

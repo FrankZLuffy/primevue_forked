@@ -1,9 +1,9 @@
 <template>
     <transition name="p-scrolltop" appear @enter="onEnter" @after-leave="onAfterLeave" v-bind="ptm('transition')">
-        <Button v-if="visible" :ref="containerRef" :class="cx('root')" @click="onClick" :aria-label="scrollTopAriaLabel" :unstyled="unstyled" v-bind="buttonProps" :pt="rootPTOptions()">
+        <Button v-if="visible" :ref="containerRef" :class="cx('root')" @click="onClick" :aria-label="scrollTopAriaLabel" :unstyled="unstyled" v-bind="buttonProps" :pt="pt">
             <template #icon="slotProps">
                 <slot name="icon" :class="cx('icon')">
-                    <component :is="icon ? 'span' : 'ChevronUpIcon'" :class="[cx('icon'), icon, slotProps.class]" v-bind="iconPTOptions" />
+                    <component :is="icon ? 'span' : 'ChevronUpIcon'" :class="[cx('icon'), icon, slotProps.class]" v-bind="ptmi('root')['icon']" />
                 </slot>
             </template>
         </Button>
@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { DomHandler, ZIndexUtils } from '@primevue/core/utils';
+import { getWindowScrollTop } from '@primeuix/utils/dom';
+import { ZIndex } from '@primeuix/utils/zindex';
 import ChevronUpIcon from '@primevue/icons/chevronup';
 import Button from 'primevue/button';
-import { mergeProps } from 'vue';
 import BaseScrollTop from './BaseScrollTop.vue';
 
 export default {
@@ -37,7 +37,7 @@ export default {
         else if (this.target === 'parent') this.unbindParentScrollListener();
 
         if (this.container) {
-            ZIndexUtils.clear(this.container);
+            ZIndex.clear(this.container);
             this.overlay = null;
         }
     },
@@ -63,7 +63,7 @@ export default {
         },
         bindDocumentScrollListener() {
             this.scrollListener = () => {
-                this.checkVisibility(DomHandler.getWindowScrollTop());
+                this.checkVisibility(getWindowScrollTop());
             };
 
             window.addEventListener('scroll', this.scrollListener);
@@ -81,19 +81,13 @@ export default {
             }
         },
         onEnter(el) {
-            ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
+            ZIndex.set('overlay', el, this.$primevue.config.zIndex.overlay);
         },
         onAfterLeave(el) {
-            ZIndexUtils.clear(el);
+            ZIndex.clear(el);
         },
         containerRef(el) {
             this.container = el ? el.$el : undefined;
-        },
-        rootPTOptions() {
-            return mergeProps(this.ptmi('root'), this.ptm('button'));
-        },
-        iconPTOptions() {
-            return mergeProps(this.ptmi('root')['icon'], this.ptm('button')['icon']);
         }
     },
     computed: {

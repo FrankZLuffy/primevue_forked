@@ -193,22 +193,14 @@ export interface DatePickerPassThroughOptions {
      */
     decade?: DatePickerPassThroughOptionType;
     /**
-     * Used to pass attributes to the view day's DOM element.
-     */
-    dayView?: DatePickerPassThroughOptionType;
-    /**
      * Used to pass attributes to the next button's DOM element.
      * @see {@link ButtonPassThroughOptions}
      */
     pcNextButton?: ButtonPassThroughOptions<DatePickerSharedPassThroughMethodOptions>;
     /**
-     * Used to pass attributes to the container's DOM element.
-     */
-    container?: DatePickerPassThroughOptionType;
-    /**
      * Used to pass attributes to the table's DOM element.
      */
-    table?: DatePickerPassThroughOptionType;
+    dayView?: DatePickerPassThroughOptionType;
     /**
      * Used to pass attributes to the table header's DOM element.
      */
@@ -357,10 +349,6 @@ export interface DatePickerPassThroughOptions {
      * Used to pass attributes to the aria year's DOM element.
      */
     hiddenYear?: DatePickerPassThroughOptionType;
-    /**
-     * Used to pass attributes to the datepicker mask's DOM element.
-     */
-    datepickerMask?: DatePickerPassThroughOptionType;
     /**
      * Used to manage all lifecycle hooks.
      * @see {@link BaseComponent.ComponentHooks}
@@ -788,6 +776,11 @@ export interface DatePickerProps {
      * @defaultValue { severity: 'secondary', text: true }
      */
     timepickerButtonProps?: object | undefined;
+    /**
+     * Spans 100% width of the container when enabled.
+     * @defaultValue null
+     */
+    fluid?: boolean | undefined;
     /**
      * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
      */

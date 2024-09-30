@@ -31,7 +31,7 @@
                         <div :ref="contentRef" :class="cx('content')" v-bind="ptm('content')">
                             <slot></slot>
                         </div>
-                        <div :ref="footerContainerRef" :class="cx('footer')" v-bind="ptm('footer')">
+                        <div v-if="$slots.footer" :ref="footerContainerRef" :class="cx('footer')" v-bind="ptm('footer')">
                             <slot name="footer"> </slot>
                         </div>
                     </template>
@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import { DomHandler, ZIndexUtils } from '@primevue/core/utils';
+import { addClass, blockBodyScroll, focus, unblockBodyScroll } from '@primeuix/utils/dom';
+import { ZIndex } from '@primeuix/utils/zindex';
 import TimesIcon from '@primevue/icons/times';
 import Button from 'primevue/button';
 import FocusTrap from 'primevue/focustrap';
@@ -67,6 +68,15 @@ export default {
     closeButton: null,
     outsideClickListener: null,
     documentKeydownListener: null,
+    watch: {
+        dismissable(newValue) {
+            if (newValue) {
+                this.enableDocumentSettings();
+            } else {
+                this.disableDocumentSettings();
+            }
+        }
+    },
     updated() {
         if (this.visible) {
             this.containerVisible = this.visible;
@@ -76,7 +86,7 @@ export default {
         this.disableDocumentSettings();
 
         if (this.mask && this.autoZIndex) {
-            ZIndexUtils.clear(this.mask);
+            ZIndex.clear(this.mask);
         }
 
         this.container = null;
@@ -92,7 +102,7 @@ export default {
             this.bindDocumentKeyDownListener();
 
             if (this.autoZIndex) {
-                ZIndexUtils.set('modal', this.mask, this.baseZIndex || this.$primevue.config.zIndex.modal);
+                ZIndex.set('modal', this.mask, this.baseZIndex || this.$primevue.config.zIndex.modal);
             }
         },
         onAfterEnter() {
@@ -100,7 +110,7 @@ export default {
         },
         onBeforeLeave() {
             if (this.modal) {
-                !this.isUnstyled && DomHandler.addClass(this.mask, 'p-overlay-mask-leave');
+                !this.isUnstyled && addClass(this.mask, 'p-overlay-mask-leave');
             }
         },
         onLeave() {
@@ -108,7 +118,7 @@ export default {
         },
         onAfterLeave() {
             if (this.autoZIndex) {
-                ZIndexUtils.clear(this.mask);
+                ZIndex.clear(this.mask);
             }
 
             this.unbindDocumentKeyDownListener();
@@ -140,7 +150,7 @@ export default {
                 }
             }
 
-            focusTarget && DomHandler.focus(focusTarget);
+            focusTarget && focus(focusTarget);
         },
         enableDocumentSettings() {
             if (this.dismissable && !this.modal) {
@@ -148,14 +158,14 @@ export default {
             }
 
             if (this.blockScroll) {
-                DomHandler.blockBodyScroll();
+                blockBodyScroll();
             }
         },
         disableDocumentSettings() {
             this.unbindOutsideClickListener();
 
             if (this.blockScroll) {
-                DomHandler.unblockBodyScroll();
+                unblockBodyScroll();
             }
         },
         onKeydown(event) {

@@ -45,7 +45,7 @@
                             :aria-hidden="firstIndex() > index || lastIndex() < index ? true : undefined"
                             :aria-label="ariaSlideNumber(index)"
                             :aria-roledescription="ariaSlideLabel"
-                            v-bind="ptm('item')"
+                            v-bind="getItemPTOptions('item', index)"
                             :data-p-carousel-item-active="firstIndex() <= index && lastIndex() >= index"
                             :data-p-carousel-item-start="firstIndex() === index"
                             :data-p-carousel-item-end="lastIndex() === index"
@@ -78,7 +78,7 @@
                 </Button>
             </div>
             <ul v-if="totalIndicators >= 0 && showIndicators" ref="indicatorContent" :class="[cx('indicatorList'), indicatorsContentClass]" @keydown="onIndicatorKeydown" v-bind="ptm('indicatorList')">
-                <li v-for="(indicator, i) of totalIndicators" :key="'p-carousel-indicator-' + i.toString()" :class="cx('indicator', { index: i })" v-bind="ptm('indicator', getIndicatorPTOptions(i))" :data-p-active="d_page === i">
+                <li v-for="(indicator, i) of totalIndicators" :key="'p-carousel-indicator-' + i.toString()" :class="cx('indicator', { index: i })" v-bind="getIndicatorPTOptions('indicator', i)" :data-p-active="d_page === i">
                     <button
                         :class="cx('indicatorButton')"
                         type="button"
@@ -86,7 +86,7 @@
                         :aria-label="ariaPageLabel(i + 1)"
                         :aria-current="d_page === i ? 'page' : undefined"
                         @click="onIndicatorClick($event, i)"
-                        v-bind="ptm('indicatorButton', getIndicatorPTOptions(i))"
+                        v-bind="getIndicatorPTOptions('indicatorButton', i)"
                     />
                 </li>
             </ul>
@@ -101,7 +101,9 @@
 </template>
 
 <script>
-import { DomHandler, ObjectUtils, UniqueComponentId } from '@primevue/core/utils';
+import { addClass, find, findSingle, getAttribute, removeClass, setAttribute } from '@primeuix/utils/dom';
+import { localeComparator, sort } from '@primeuix/utils/object';
+import { UniqueComponentId } from '@primevue/core/utils';
 import ChevronDownIcon from '@primevue/icons/chevrondown';
 import ChevronLeftIcon from '@primevue/icons/chevronleft';
 import ChevronRightIcon from '@primevue/icons/chevronright';
@@ -270,12 +272,22 @@ export default {
         }
     },
     methods: {
-        getIndicatorPTOptions(index) {
-            return {
+        getIndicatorPTOptions(key, index) {
+            return this.ptm(key, {
                 context: {
                     highlighted: index === this.d_page
                 }
-            };
+            });
+        },
+        getItemPTOptions(key, index) {
+            return this.ptm(key, {
+                context: {
+                    index,
+                    active: this.firstIndex() <= index && this.lastIndex() >= index,
+                    start: this.firstIndex() === index,
+                    end: this.lastIndex() === index
+                }
+            });
         },
         step(dir, page) {
             let totalShiftedItems = this.totalShiftedItems;
@@ -314,7 +326,7 @@ export default {
             }
 
             if (this.$refs.itemsContainer) {
-                !this.isUnstyled && DomHandler.removeClass(this.$refs.itemsContainer, 'p-items-hidden');
+                !this.isUnstyled && removeClass(this.$refs.itemsContainer, 'p-items-hidden');
                 this.$refs.itemsContainer.style.transform = this.isVertical() ? `translate3d(0, ${totalShiftedItems * (100 / this.d_numVisible)}%, 0)` : `translate3d(${totalShiftedItems * (100 / this.d_numVisible)}%, 0, 0)`;
                 this.$refs.itemsContainer.style.transition = 'transform 500ms ease 0s';
             }
@@ -395,7 +407,7 @@ export default {
         },
         onTransitionEnd() {
             if (this.$refs.itemsContainer) {
-                !this.isUnstyled && DomHandler.addClass(this.$refs.itemsContainer, 'p-items-hidden');
+                !this.isUnstyled && addClass(this.$refs.itemsContainer, 'p-items-hidden');
                 this.$refs.itemsContainer.style.transition = '';
 
                 if ((this.d_page === 0 || this.d_page === this.totalIndicators - 1) && this.isCircular()) {
@@ -475,7 +487,7 @@ export default {
             }
         },
         onRightKey() {
-            const indicators = [...DomHandler.find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
+            const indicators = [...find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
             const activeIndex = this.findFocusedIndicatorIndex();
 
             this.changedFocusedIndicator(activeIndex, activeIndex + 1 === indicators.length ? indicators.length - 1 : activeIndex + 1);
@@ -491,29 +503,29 @@ export default {
             this.changedFocusedIndicator(activeIndex, 0);
         },
         onEndKey() {
-            const indicators = [...DomHandler.find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
+            const indicators = [...find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
             const activeIndex = this.findFocusedIndicatorIndex();
 
             this.changedFocusedIndicator(activeIndex, indicators.length - 1);
         },
         onTabKey() {
-            const indicators = [...DomHandler.find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
-            const highlightedIndex = indicators.findIndex((ind) => DomHandler.getAttribute(ind, 'data-p-active') === true);
+            const indicators = [...find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
+            const highlightedIndex = indicators.findIndex((ind) => getAttribute(ind, 'data-p-active') === true);
 
-            const activeIndicator = DomHandler.findSingle(this.$refs.indicatorContent, '[data-pc-section="indicator"] > button[tabindex="0"]');
+            const activeIndicator = findSingle(this.$refs.indicatorContent, '[data-pc-section="indicator"] > button[tabindex="0"]');
             const activeIndex = indicators.findIndex((ind) => ind === activeIndicator.parentElement);
 
             indicators[activeIndex].children[0].tabIndex = '-1';
             indicators[highlightedIndex].children[0].tabIndex = '0';
         },
         findFocusedIndicatorIndex() {
-            const indicators = [...DomHandler.find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
-            const activeIndicator = DomHandler.findSingle(this.$refs.indicatorContent, '[data-pc-section="indicator"] > button[tabindex="0"]');
+            const indicators = [...find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
+            const activeIndicator = findSingle(this.$refs.indicatorContent, '[data-pc-section="indicator"] > button[tabindex="0"]');
 
             return indicators.findIndex((ind) => ind === activeIndicator.parentElement);
         },
         changedFocusedIndicator(prevInd, nextInd) {
-            const indicators = [...DomHandler.find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
+            const indicators = [...find(this.$refs.indicatorContent, '[data-pc-section="indicator"]')];
 
             indicators[prevInd].children[0].tabIndex = '-1';
             indicators[nextInd].children[0].tabIndex = '0';
@@ -552,7 +564,7 @@ export default {
             if (!this.carouselStyle) {
                 this.carouselStyle = document.createElement('style');
                 this.carouselStyle.type = 'text/css';
-                DomHandler.setAttribute(this.carouselStyle, 'nonce', this.$primevue?.config?.csp?.nonce);
+                setAttribute(this.carouselStyle, 'nonce', this.$primevue?.config?.csp?.nonce);
                 document.body.appendChild(this.carouselStyle);
             }
 
@@ -564,13 +576,13 @@ export default {
 
             if (this.responsiveOptions && !this.isUnstyled) {
                 let _responsiveOptions = [...this.responsiveOptions];
-                const comparer = ObjectUtils.localeComparator();
+                const comparer = localeComparator();
 
                 _responsiveOptions.sort((data1, data2) => {
                     const value1 = data1.breakpoint;
                     const value2 = data2.breakpoint;
 
-                    return ObjectUtils.sort(value1, value2, -1, comparer);
+                    return sort(value1, value2, -1, comparer);
                 });
 
                 for (let i = 0; i < _responsiveOptions.length; i++) {

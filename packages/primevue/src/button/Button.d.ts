@@ -10,7 +10,7 @@
 import type { DefineComponent, DesignToken, EmitFn, GlobalComponentConstructor, HintedString, PassThrough } from '@primevue/core';
 import type { ComponentHooks } from '@primevue/core/basecomponent';
 import type { PassThroughOptions } from 'primevue/passthrough';
-import { ButtonHTMLAttributes, VNode } from 'vue';
+import type { ButtonHTMLAttributes, Component, VNode } from 'vue';
 
 export declare type ButtonPassThroughOptionType<T = any> = ButtonPassThroughAttributes | ((options: ButtonPassThroughMethodOptions<T>) => ButtonPassThroughAttributes | string) | string | null | undefined;
 
@@ -130,6 +130,16 @@ export interface ButtonProps extends ButtonHTMLAttributes {
      */
     loadingIcon?: string | undefined;
     /**
+     * Use to change the HTML tag of root element.
+     * @defaultValue BUTTON
+     */
+    as?: string | Component | undefined;
+    /**
+     * When enabled, it changes the default rendered element for the one passed as a child element.
+     * @defaultValue false
+     */
+    asChild?: boolean | undefined;
+    /**
      *  Add a link style to the button.
      * @defaultValue false
      */
@@ -167,6 +177,11 @@ export interface ButtonProps extends ButtonHTMLAttributes {
      * @defaultValue false
      */
     plain?: boolean | undefined;
+    /**
+     * Spans 100% width of the container when enabled.
+     * @defaultValue null
+     */
+    fluid?: boolean | undefined;
     /**
      * It generates scoped CSS variables using design tokens for the component.
      */

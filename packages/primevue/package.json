@@ -1,6 +1,6 @@
 {
     "name": "primevue",
-    "version": "4.0.0-rc.2",
+    "version": "4.0.7",
     "author": "PrimeTek Informatics",
     "description": "PrimeVue is an open source UI library for Vue featuring a rich set of 80+ components, a theme designer, various theme alternatives such as Material, Bootstrap, Tailwind, premium templates and professional support. In addition, it integrates with PrimeBlock, which has 370+ ready to use UI blocks to build spectacular applications in no time.",
     "homepage": "https://primevue.org/",
@@ -130,12 +130,16 @@
         "./fileupload/style": "./src/fileupload/style/FileUploadStyle.js",
         "./floatlabel": "./src/floatlabel/FloatLabel.vue",
         "./floatlabel/style": "./src/floatlabel/style/FloatLabelStyle.js",
+        "./fluid": "./src/fluid/Fluid.vue",
+        "./fluid/style": "./src/fluid/style/FluidStyle.js",
         "./focustrap": "./src/focustrap/FocusTrap.js",
         "./focustrap/style": "./src/focustrap/style/FocusTrapStyle.js",
         "./galleria": "./src/galleria/Galleria.vue",
         "./galleria/style": "./src/galleria/style/GalleriaStyle.js",
         "./iconfield": "./src/iconfield/IconField.vue",
         "./iconfield/style": "./src/iconfield/style/IconFieldStyle.js",
+        "./iftalabel": "./src/iftalabel/IftaLabel.vue",
+        "./iftalabel/style": "./src/iftalabel/style/IftaLabelStyle.js",
         "./image": "./src/image/Image.vue",
         "./image/style": "./src/image/style/ImageStyle.js",
         "./inlinemessage": "./src/inlinemessage/InlineMessage.vue",
@@ -245,8 +249,6 @@
         "./steppanels/style": "./src/steppanels/style/StepPanelsStyle.js",
         "./stepper": "./src/stepper/Stepper.vue",
         "./stepper/style": "./src/stepper/style/StepperStyle.js",
-        "./stepperpanel": "./src/stepperpanel/StepperPanel.vue",
-        "./stepperpanel/style": "./src/stepperpanel/style/StepperPanelStyle.js",
         "./steps": "./src/steps/Steps.vue",
         "./steps/style": "./src/steps/style/StepsStyle.js",
         "./styleclass": "./src/styleclass/StyleClass.js",
@@ -319,9 +321,18 @@
         "build:api": "node ./scripts/build-api.js",
         "build:prebuild": "node ./scripts/prebuild.mjs",
         "build:postbuild": "node ./scripts/postbuild.mjs",
-        "dev:link": "pnpm link --global && npm link"
+        "dev:link": "pnpm link --global && npm link",
+        "test:unit": "vitest run",
+        "test:unit:watch": "vitest watch",
+        "test:coverage": "vitest run --coverage"
+    },
+    "devDependencies": {
+        "@vue/test-utils": "^2.0.0",
+        "vitest": "^0.29.8"
     },
     "dependencies": {
+        "@primeuix/styled": "^0.1.1",
+        "@primeuix/utils": "^0.1.1",
         "@primevue/core": "workspace:*",
         "@primevue/icons": "workspace:*"
     },

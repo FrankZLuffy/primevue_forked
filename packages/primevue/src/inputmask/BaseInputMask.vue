@@ -11,6 +11,14 @@ export default {
             type: String,
             default: '_'
         },
+        id: {
+            type: String,
+            default: null
+        },
+        class: {
+            type: [String, Object],
+            default: null
+        },
         mask: {
             type: String,
             default: null
@@ -39,8 +47,16 @@ export default {
             type: Boolean,
             default: false
         },
+        name: {
+            type: String,
+            default: null
+        },
         variant: {
             type: String,
+            default: null
+        },
+        fluid: {
+            type: Boolean,
             default: null
         }
     },

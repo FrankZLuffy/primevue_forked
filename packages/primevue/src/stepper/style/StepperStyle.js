@@ -113,10 +113,6 @@ const theme = ({ dt }) => `
     background: ${dt('stepper.separator.active.background')};
 }
 
-.p-step:has(~ .p-step-active) .p-stepper-separator {
-    background: ${dt('stepper.separator.active.background')};
-}
-
 .p-stepper-separator {
     flex: 1 1 0;
     background: ${dt('stepper.separator.background')};
@@ -132,8 +128,8 @@ const theme = ({ dt }) => `
 }
 
 .p-steppanel {
-    background: ${dt('stepper.steppanel.content.background')};
-    color: ${dt('stepper.steppanel.content.color')};
+    background: ${dt('stepper.steppanel.background')};
+    color: ${dt('stepper.steppanel.color')};
 }
 
 .p-stepper:has(.p-stepitem) {
@@ -179,7 +175,7 @@ const theme = ({ dt }) => `
 }
 
 .p-stepitem:last-of-type .p-steppanel {
-    padding: ${dt('stepper.steppanel.last.padding')};
+    padding-inline-start: ${dt('stepper.step.number.size')};
 }
 `;
 

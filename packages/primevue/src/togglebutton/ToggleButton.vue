@@ -1,5 +1,17 @@
 <template>
-    <button v-ripple type="button" :class="cx('root')" :tabindex="tabindex" :disabled="disabled" :aria-pressed="modelValue" @click="onChange" v-bind="getPTOptions('root')" :data-p-checked="active" :data-p-disabled="disabled">
+    <button
+        v-ripple
+        type="button"
+        :class="cx('root')"
+        :tabindex="tabindex"
+        :disabled="disabled"
+        :aria-pressed="modelValue"
+        @click="onChange"
+        v-bind="getPTOptions('root')"
+        :aria-labelledby="ariaLabelledby"
+        :data-p-checked="active"
+        :data-p-disabled="disabled"
+    >
         <span :class="cx('content')" v-bind="getPTOptions('content')">
             <slot>
                 <slot name="icon" :value="modelValue" :class="cx('icon')">
@@ -12,7 +24,7 @@
 </template>
 
 <script>
-import { ObjectUtils } from '@primevue/core/utils';
+import { isNotEmpty } from '@primeuix/utils/object';
 import Ripple from 'primevue/ripple';
 import BaseToggleButton from './BaseToggleButton.vue';
 
@@ -44,7 +56,7 @@ export default {
             return this.modelValue === true;
         },
         hasLabel() {
-            return ObjectUtils.isNotEmpty(this.onLabel) && ObjectUtils.isNotEmpty(this.offLabel);
+            return isNotEmpty(this.onLabel) && isNotEmpty(this.offLabel);
         },
         label() {
             return this.hasLabel ? (this.modelValue ? this.onLabel : this.offLabel) : '&nbsp;';

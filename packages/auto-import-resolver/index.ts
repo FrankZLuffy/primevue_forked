@@ -28,11 +28,11 @@ export function PrimeVueResolver(options: PrimeVueResolverOptions = {}): Compone
             resolve: (name: string) => {
                 const { prefix } = options.components || {};
                 const cName = getName(name, prefix);
-                const cMeta = components.find((c) => c.name.toLocaleLowerCase() === cName.toLocaleLowerCase());
+                const cMeta = components.find((c) => c.name.toLocaleLowerCase() === cName?.toLocaleLowerCase());
 
                 if (cMeta) {
                     return (
-                        options?.resolve(cMeta, 'component') ?? {
+                        options?.resolve?.(cMeta, 'component') ?? {
                             from: cMeta.from
                         }
                     );
@@ -44,11 +44,11 @@ export function PrimeVueResolver(options: PrimeVueResolverOptions = {}): Compone
             resolve: (name: string) => {
                 const { prefix } = options.directives || {};
                 const dName = getName(name, prefix);
-                const dMeta = directives.find((d) => d.name.toLocaleLowerCase() === dName.toLocaleLowerCase());
+                const dMeta = directives.find((d) => d.name.toLocaleLowerCase() === dName?.toLocaleLowerCase());
 
                 if (dMeta) {
                     return (
-                        options?.resolve(dMeta, 'directive') ?? {
+                        options?.resolve?.(dMeta, 'directive') ?? {
                             as: dMeta.as,
                             from: dMeta.from
                         }

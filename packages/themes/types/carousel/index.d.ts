@@ -16,81 +16,6 @@ export interface CarouselDesignTokens extends ColorSchemeDesignToken<CarouselDes
      */
     root?: {
         /**
-         * Indicator list of root
-         */
-        indicatorList?: {
-            /**
-             * Indicator list padding of root
-             *
-             * @designToken carousel.indicator.list.padding
-             */
-            padding?: string;
-            /**
-             * Indicator list gap of root
-             *
-             * @designToken carousel.indicator.list.gap
-             */
-            gap?: string;
-        };
-        /**
-         * Indicator of root
-         */
-        indicator?: {
-            /**
-             * Indicator width of root
-             *
-             * @designToken carousel.indicator.width
-             */
-            width?: string;
-            /**
-             * Indicator height of root
-             *
-             * @designToken carousel.indicator.height
-             */
-            height?: string;
-            /**
-             * Indicator border radius of root
-             *
-             * @designToken carousel.indicator.border.radius
-             */
-            borderRadius?: string;
-            /**
-             * Indicator focus ring of root
-             */
-            focusRing?: {
-                /**
-                 * Indicator focus ring width of root
-                 *
-                 * @designToken carousel.indicator.focus.ring.width
-                 */
-                width?: string;
-                /**
-                 * Indicator focus ring style of root
-                 *
-                 * @designToken carousel.indicator.focus.ring.style
-                 */
-                style?: string;
-                /**
-                 * Indicator focus ring color of root
-                 *
-                 * @designToken carousel.indicator.focus.ring.color
-                 */
-                color?: string;
-                /**
-                 * Indicator focus ring offset of root
-                 *
-                 * @designToken carousel.indicator.focus.ring.offset
-                 */
-                offset?: string;
-                /**
-                 * Indicator focus ring shadow of root
-                 *
-                 * @designToken carousel.indicator.focus.ring.shadow
-                 */
-                shadow?: string;
-            };
-        };
-        /**
          * Transition duration of root
          *
          * @designToken carousel.transition.duration
@@ -98,9 +23,90 @@ export interface CarouselDesignTokens extends ColorSchemeDesignToken<CarouselDes
         transitionDuration?: string;
     };
     /**
+     * Used to pass tokens of the content section
+     */
+    content?: {
+        /**
+         * Gap of content
+         *
+         * @designToken carousel.content.gap
+         */
+        gap?: string;
+    };
+    /**
+     * Used to pass tokens of the indicator list section
+     */
+    indicatorList?: {
+        /**
+         * Padding of indicator list
+         *
+         * @designToken carousel.indicator.list.padding
+         */
+        padding?: string;
+        /**
+         * Gap of indicator list
+         *
+         * @designToken carousel.indicator.list.gap
+         */
+        gap?: string;
+    };
+    /**
      * Used to pass tokens of the indicator section
      */
     indicator?: {
+        /**
+         * Width of indicator
+         *
+         * @designToken carousel.indicator.width
+         */
+        width?: string;
+        /**
+         * Height of indicator
+         *
+         * @designToken carousel.indicator.height
+         */
+        height?: string;
+        /**
+         * Border radius of indicator
+         *
+         * @designToken carousel.indicator.border.radius
+         */
+        borderRadius?: string;
+        /**
+         * Focus ring of indicator
+         */
+        focusRing?: {
+            /**
+             * Focus ring width of indicator
+             *
+             * @designToken carousel.indicator.focus.ring.width
+             */
+            width?: string;
+            /**
+             * Focus ring style of indicator
+             *
+             * @designToken carousel.indicator.focus.ring.style
+             */
+            style?: string;
+            /**
+             * Focus ring color of indicator
+             *
+             * @designToken carousel.indicator.focus.ring.color
+             */
+            color?: string;
+            /**
+             * Focus ring offset of indicator
+             *
+             * @designToken carousel.indicator.focus.ring.offset
+             */
+            offset?: string;
+            /**
+             * Focus ring shadow of indicator
+             *
+             * @designToken carousel.indicator.focus.ring.shadow
+             */
+            shadow?: string;
+        };
         /**
          * Background of indicator
          *

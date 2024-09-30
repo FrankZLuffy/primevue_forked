@@ -115,7 +115,7 @@ export interface TreePassThroughOptions<T = any> {
      * Used to pass attributes to the InputText component.
      * @see {@link InputTextPassThroughOptions}
      */
-    pcFilter?: InputTextPassThroughOptions<TreeSharedPassThroughMethodOptions>;
+    pcFilterInput?: InputTextPassThroughOptions<TreeSharedPassThroughMethodOptions>;
     /**
      * Used to pass attributes to the InputIcon component.
      * @see {@link InputIconPassThroughOptions}
@@ -152,7 +152,7 @@ export interface TreePassThroughOptions<T = any> {
     /**
      * Used to pass attributes to the checkbox's DOM element.
      */
-    nodeCheckbox?: TreePassThroughOptionType<T>;
+    pcNodeCheckbox?: TreePassThroughOptionType<T>;
     /**
      * Used to pass attributes to the node icon's DOM element.
      */

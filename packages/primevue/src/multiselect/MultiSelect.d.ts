@@ -141,13 +141,13 @@ export interface MultiSelectPassThroughOptions {
      */
     pcChip?: ChipPassThroughOptions<MultiSelectSharedPassThroughMethodOptions>;
     /**
-     * Used to pass attributes to the chip icon's DOM element.
-     */
-    chipIcon?: MultiSelectPassThroughOptionType;
-    /**
      * Used to pass attributes to the dropdown's DOM element.
      */
     dropdown?: MultiSelectPassThroughOptionType;
+    /**
+     * Used to pass attributes to the loading icon's DOM element.
+     */
+    loadingIcon?: MultiSelectPassThroughOptionType;
     /**
      * Used to pass attributes to the dropdown icon's DOM element.
      */
@@ -220,6 +220,10 @@ export interface MultiSelectPassThroughOptions {
      * Used to pass attributes to the hidden input container's DOM element.
      */
     hiddenInputContainer?: MultiSelectPassThroughOptionType;
+    /**
+     * Used to pass attributes to the hidden input's DOM element.
+     */
+    hiddenInput?: MultiSelectPassThroughOptionType;
     /**
      * Used to pass attributes to the hidden first focusable element's DOM element.
      */
@@ -360,6 +364,11 @@ export interface MultiSelectProps {
      * @defaultValue outlined
      */
     variant?: 'outlined' | 'filled' | undefined;
+    /**
+     * Spans 100% width of the container when enabled.
+     * @defaultValue null
+     */
+    fluid?: boolean | undefined;
     /**
      * Identifier of the underlying input element.
      */

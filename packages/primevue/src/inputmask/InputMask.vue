@@ -1,26 +1,32 @@
 <template>
     <InputText
+        :id="id"
         :value="modelValue"
-        :class="cx('root')"
+        :class="inputClass"
         :readonly="readonly"
         :disabled="disabled"
         :invalid="invalid"
+        :name="name"
         :variant="variant"
         :placeholder="placeholder"
+        :fluid="hasFluid"
         :unstyled="unstyled"
         @input="onInput"
+        @compositionend="onInput"
         @focus="onFocus"
         @blur="onBlur"
         @keydown="onKeyDown"
         @keypress="onKeyPress"
         @paste="onPaste"
-        :pt="ptmi('root', ptmParams)"
+        :pt="rootPTOptions"
     />
 </template>
 
 <script>
-import { DomHandler } from '@primevue/core/utils';
+import { getUserAgent } from '@primeuix/utils/dom';
+import { isEmpty } from '@primeuix/utils/object';
 import InputText from 'primevue/inputtext';
+import { mergeProps } from 'vue';
 import BaseInputMask from './BaseInputMask.vue';
 
 export default {
@@ -28,6 +34,9 @@ export default {
     extends: BaseInputMask,
     inheritAttrs: false,
     emits: ['update:modelValue', 'focus', 'blur', 'keydown', 'complete', 'keypress', 'paste'],
+    inject: {
+        $pcFluid: { default: null }
+    },
     watch: {
         mask(newMask, oldMask) {
             if (oldMask !== newMask) {
@@ -45,10 +54,14 @@ export default {
     },
     methods: {
         onInput(event) {
-            if (this.androidChrome) this.handleAndroidInput(event);
-            else this.handleInputChange(event);
+            // Check if the event is part of a text composition process (e.g., for Asian languages).
+            // If event.isComposing is true, it means the user is still composing text and the input is not finalized.
+            if (!event.isComposing) {
+                if (this.androidChrome) this.handleAndroidInput(event);
+                else this.handleInputChange(event);
 
-            this.$emit('update:modelValue', event.target.value);
+                this.$emit('update:modelValue', event.target.value);
+            }
         },
         onFocus(event) {
             if (this.readonly) {
@@ -103,7 +116,7 @@ export default {
                 pos,
                 begin,
                 end;
-            let iPhone = /iphone/i.test(DomHandler.getUserAgent());
+            let iPhone = /iphone/i.test(getUserAgent());
 
             this.oldVal = this.$el.value;
 
@@ -170,7 +183,7 @@ export default {
                         this.writeBuffer();
                         next = this.seekNext(p);
 
-                        if (/android/i.test(DomHandler.getUserAgent())) {
+                        if (/android/i.test(getUserAgent())) {
                             //Path for CSP Violation on FireFox OS 1.1
                             let proxy = () => {
                                 this.caret(next);
@@ -468,7 +481,7 @@ export default {
                 '*': '[A-Za-z0-9]'
             };
 
-            let ua = DomHandler.getUserAgent();
+            let ua = getUserAgent();
 
             this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
 
@@ -517,12 +530,21 @@ export default {
         filled() {
             return this.modelValue != null && this.modelValue.toString().length > 0;
         },
+        inputClass() {
+            return [this.cx('root'), this.class];
+        },
+        rootPTOptions() {
+            return mergeProps(this.ptm('pcInputText', this.ptmParams), this.ptmi('root', this.ptmParams));
+        },
         ptmParams() {
             return {
                 context: {
                     filled: this.filled
                 }
             };
+        },
+        hasFluid() {
+            return isEmpty(this.fluid) ? !!this.$pcFluid : this.fluid;
         }
     },
     components: {

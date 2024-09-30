@@ -18,7 +18,7 @@
             >
                 <div :class="cx('itemContent')" @click="onItemClick($event, processedItem)" @mousemove="onItemMouseMove($event, processedItem)" v-bind="getPTOptions('itemContent', processedItem, index)">
                     <template v-if="!templates.item">
-                        <a v-ripple :href="getItemProp(processedItem, 'url')" :class="cx('itemLink')" :target="getItemProp(processedItem, 'target')" tabindex="-1" aria-hidden="true" v-bind="getPTOptions('itemLink', processedItem, index)">
+                        <a v-ripple :href="getItemProp(processedItem, 'url')" :class="cx('itemLink')" :target="getItemProp(processedItem, 'target')" tabindex="-1" v-bind="getPTOptions('itemLink', processedItem, index)">
                             <template v-if="isItemGroup(processedItem)">
                                 <component v-if="templates.submenuicon" :is="templates.submenuicon" :class="cx('submenuIcon')" :active="isItemActive(processedItem)" v-bind="getPTOptions('submenuIcon', processedItem, index)" />
                                 <component v-else :is="isItemActive(processedItem) ? 'ChevronDownIcon' : 'ChevronRightIcon'" :class="cx('submenuIcon')" v-bind="getPTOptions('submenuIcon', processedItem, index)" />
@@ -72,8 +72,8 @@
 </template>
 
 <script>
+import { isNotEmpty, resolve } from '@primeuix/utils/object';
 import BaseComponent from '@primevue/core/basecomponent';
-import { ObjectUtils } from '@primevue/core/utils';
 import ChevronDownIcon from '@primevue/icons/chevrondown';
 import ChevronRightIcon from '@primevue/icons/chevronright';
 import Ripple from 'primevue/ripple';
@@ -122,7 +122,7 @@ export default {
             return this.getItemId(processedItem);
         },
         getItemProp(processedItem, name, params) {
-            return processedItem && processedItem.item ? ObjectUtils.getItemValue(processedItem.item[name], params) : undefined;
+            return processedItem && processedItem.item ? resolve(processedItem.item[name], params) : undefined;
         },
         getItemLabel(processedItem) {
             return this.getItemProp(processedItem, 'label');
@@ -130,7 +130,7 @@ export default {
         getPTOptions(key, processedItem, index) {
             return this.ptm(key, {
                 context: {
-                    item: processedItem,
+                    item: processedItem.item,
                     index,
                     active: this.isItemActive(processedItem),
                     focused: this.isItemFocused(processedItem),
@@ -151,7 +151,7 @@ export default {
             return this.focusedItemId === this.getItemId(processedItem);
         },
         isItemGroup(processedItem) {
-            return ObjectUtils.isNotEmpty(processedItem.items);
+            return isNotEmpty(processedItem.items);
         },
         onItemClick(event, processedItem) {
             this.getItemProp(processedItem, 'command', { originalEvent: event, item: processedItem.item });

@@ -1,6 +1,6 @@
 /**
  *
- * Select also known as Select, is used to choose an item from a collection of options.
+ * Select is used to choose an item from a collection of options.
  *
  * [Live Demo](https://www.primevue.org/select/)
  *
@@ -375,6 +375,11 @@ export interface SelectProps {
      * @defaultValue false
      */
     showClear?: boolean | undefined;
+    /**
+     * Spans 100% width of the container when enabled.
+     * @defaultValue null
+     */
+    fluid?: boolean | undefined;
     /**
      * @deprecated since v4.0. Use 'labelId' instead.
      * Identifier of the underlying input element.

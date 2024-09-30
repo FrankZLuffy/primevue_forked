@@ -15,7 +15,7 @@
         v-bind="level === 1 ? getPTOptions('node') : ptm('nodeChildren')"
     >
         <div :class="cx('nodeContent')" @click="onClick" @touchend="onTouchEnd" :style="node.style" v-bind="getPTOptions('nodeContent')" :data-p-selected="checkboxMode ? checked : selected" :data-p-selectable="selectable">
-            <button v-ripple type="button" :class="cx('nodeToggleButton')" @click="toggle" tabindex="-1" aria-hidden="true" v-bind="getPTOptions('nodeToggleButton')">
+            <button v-ripple type="button" :class="cx('nodeToggleButton')" @click="toggle" tabindex="-1" v-bind="getPTOptions('nodeToggleButton')">
                 <template v-if="node.loading && loadingMode === 'icon'">
                     <!-- TODO: nodetogglericon deprecated since v4.0-->
                     <component v-if="templates['nodetoggleicon'] || templates['nodetogglericon']" :is="templates['nodetoggleicon'] || templates['nodetogglericon']" :class="cx('nodeToggleIcon')" />
@@ -28,7 +28,17 @@
                     <component v-else :is="node.collapsedIcon ? 'span' : 'ChevronRightIcon'" :class="cx('nodeToggleIcon')" v-bind="getPTOptions('nodeToggleIcon')" />
                 </template>
             </button>
-            <Checkbox v-if="checkboxMode" :modelValue="checked" :binary="true" :indeterminate="partialChecked" :class="cx('nodeCheckbox')" :tabindex="-1" :unstyled="unstyled" :pt="getPTOptions('nodeCheckbox')" :data-p-partialchecked="partialChecked">
+            <Checkbox
+                v-if="checkboxMode"
+                :modelValue="checked"
+                :binary="true"
+                :indeterminate="partialChecked"
+                :class="cx('nodeCheckbox')"
+                :tabindex="-1"
+                :unstyled="unstyled"
+                :pt="getPTOptions('pcNodeCheckbox')"
+                :data-p-partialchecked="partialChecked"
+            >
                 <template #icon="slotProps">
                     <component v-if="templates['checkboxicon']" :is="templates['checkboxicon']" :checked="slotProps.checked" :partialChecked="partialChecked" :class="slotProps.class" />
                 </template>
@@ -62,8 +72,8 @@
 </template>
 
 <script>
+import { find, findSingle, getAttribute } from '@primeuix/utils/dom';
 import BaseComponent from '@primevue/core/basecomponent';
-import { DomHandler } from '@primevue/core/utils';
 import CheckIcon from '@primevue/icons/check';
 import ChevronDownIcon from '@primevue/icons/chevrondown';
 import ChevronRightIcon from '@primevue/icons/chevronright';
@@ -136,14 +146,16 @@ export default {
             });
         },
         onClick(event) {
-            if (this.toggleClicked || DomHandler.getAttribute(event.target, '[data-pc-section="nodetogglebutton"]') || DomHandler.getAttribute(event.target.parentElement, '[data-pc-section="nodetogglebutton"]')) {
+            if (this.toggleClicked || getAttribute(event.target, '[data-pc-section="nodetogglebutton"]') || getAttribute(event.target.parentElement, '[data-pc-section="nodetogglebutton"]')) {
                 this.toggleClicked = false;
 
                 return;
             }
 
             if (this.isCheckboxSelectionMode()) {
-                this.toggleCheckbox();
+                if (this.node.selectable != false) {
+                    this.toggleCheckbox();
+                }
             } else {
                 this.$emit('node-click', {
                     originalEvent: event,
@@ -246,7 +258,7 @@ export default {
             });
         },
         onArrowLeft(event) {
-            const togglerElement = DomHandler.findSingle(event.currentTarget, '[data-pc-section="nodetogglebutton"]');
+            const togglerElement = findSingle(event.currentTarget, '[data-pc-section="nodetogglebutton"]');
 
             if (this.level === 0 && !this.expanded) {
                 return false;
@@ -274,7 +286,7 @@ export default {
             this.setAllNodesTabIndexes();
         },
         setAllNodesTabIndexes() {
-            const nodes = DomHandler.find(this.$refs.currentNode.closest('[data-pc-section="rootchildren"]'), '[role="treeitem"]');
+            const nodes = find(this.$refs.currentNode.closest('[data-pc-section="rootchildren"]'), '[role="treeitem"]');
 
             const hasSelectedNode = [...nodes].some((node) => node.getAttribute('aria-selected') === 'true' || node.getAttribute('aria-checked') === 'true');
 
@@ -294,7 +306,7 @@ export default {
         },
         setTabIndexForSelectionMode(event, nodeTouched) {
             if (this.selectionMode !== null) {
-                const elements = [...DomHandler.find(this.$refs.currentNode.parentElement, '[role="treeitem"]')];
+                const elements = [...find(this.$refs.currentNode.parentElement, '[role="treeitem"]')];
 
                 event.currentTarget.tabIndex = nodeTouched === false ? -1 : 0;
 
@@ -313,7 +325,7 @@ export default {
             const parentListElement = node.closest('ul').closest('li');
 
             if (parentListElement) {
-                const prevNodeButton = DomHandler.findSingle(parentListElement, 'button');
+                const prevNodeButton = findSingle(parentListElement, 'button');
 
                 if (prevNodeButton && prevNodeButton.style.visibility !== 'hidden') {
                     return parentListElement;
@@ -337,7 +349,7 @@ export default {
             });
         },
         propagateDown(node, check, selectionKeys) {
-            if (check) selectionKeys[node.key] = { checked: true, partialChecked: false };
+            if (check && node.selectable != false) selectionKeys[node.key] = { checked: true, partialChecked: false };
             else delete selectionKeys[node.key];
 
             if (node.children && node.children.length) {
@@ -401,7 +413,7 @@ export default {
         getParentNodeElement(nodeElement) {
             const parentNodeElement = nodeElement.parentElement.parentElement;
 
-            return DomHandler.getAttribute(parentNodeElement, 'role') === 'treeitem' ? parentNodeElement : null;
+            return getAttribute(parentNodeElement, 'role') === 'treeitem' ? parentNodeElement : null;
         },
         focusNode(element) {
             element.focus();
